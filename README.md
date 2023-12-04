@@ -2,6 +2,12 @@
 
 AdHoc Automations
 
+Get started
+```
+git clone https://github.com/imRohitsahu/Adhoc-Automations.git
+cd Adhoc-Automations
+```
+
 Step 1:  Install python required libraries.
 
 ```
