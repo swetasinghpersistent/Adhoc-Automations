@@ -63,7 +63,7 @@ if __name__== '__main__':
     project_id = os.environ.get("PROJECT_ID", "meesho-supply-prd-0622")
     excel_file_path= os.environ.get("EXCEL_FILE_PATH", "jobs_info.xlsx")
     dest_bucket_name=os.environ.get("DEST_BUCKET_NAME", "meesho-supply-v2")
-    source_bucket_name_bucket_name=os.environ.get("SOURCE_BUCKET_NAME", "gcs-supl-fnf-pdf-prd")
+    source_bucket_name=os.environ.get("SOURCE_BUCKET_NAME", "gcs-supl-fnf-pdf-prd")
     jobs_df = pd.read_excel(excel_file_path, sheet_name='Sheet1', engine='openpyxl')
     # pool_option1 = "meesho-dataengg-sts-transfer-pool-1"
     # pool_option2 = "meesho-dataengg-sts-transfer-pool-2"
