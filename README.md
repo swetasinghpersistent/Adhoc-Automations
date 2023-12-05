@@ -3,8 +3,7 @@
 AdHoc Automations
 
 > Prerequisite: Python3.11
->
-> gcloud application auth
+> gcloud auth application-default login    # makesure to have required access
 
 Get started
 
