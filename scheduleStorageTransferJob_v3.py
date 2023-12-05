@@ -1,4 +1,5 @@
 import pandas as pd
+import traceback
 from google.cloud import storage_transfer_v1
 from google.cloud import storage
 from google.protobuf.timestamp_pb2 import Timestamp
@@ -65,12 +66,13 @@ if __name__== '__main__':
     dest_bucket_name=os.environ.get("DEST_BUCKET_NAME", "meesho-supply-v2")
     source_bucket_name=os.environ.get("SOURCE_BUCKET_NAME", "gcs-supl-fnf-pdf-prd")
     jobs_df = pd.read_excel(excel_file_path, sheet_name='Sheet1', engine='openpyxl')
-    # pool_option1 = "meesho-dataengg-sts-transfer-pool-1"
-    # pool_option2 = "meesho-dataengg-sts-transfer-pool-2"
-    # endpoint1= "bucket.vpce-0dc2fb490b50f02e2-uwoenjfk.s3.ap-southeast-1.vpce.amazonaws.com"
-    # endpoint2= "bucket.vpce-0fb63f3ffd470c949-ntbhdiq9.s3.ap-southeast-1.vpce.amazonaws.com"
-    # switchEndpoint=True
-    # switchPool = True
+    pool_option1 = os.environ.get("POOL_OPTION1","meesho-dataengg-sts-transfer-pool-1")
+    pool_option2 = os.environ.get("POOL_OPTION2","meesho-dataengg-sts-transfer-pool-2")
+    endpoint1= os.environ.get("ENDPOINT1" ,"bucket.vpce-0dc2fb490b50f02e2-uwoenjfk.s3.ap-southeast-1.vpce.amazonaws.com")
+    endpoint2= os.environ.get("ENDPOINT2" ,"bucket.vpce-0fb63f3ffd470c949-ntbhdiq9.s3.ap-southeast-1.vpce.amazonaws.com")
+
+    switchEndpoint=True
+    switchPool = True
     transfer_client = storage_transfer_v1.StorageTransferServiceClient()
     cnt=0
     for index, row in jobs_df.iterrows():
@@ -117,15 +119,15 @@ if __name__== '__main__':
         transfer_spec = storage_transfer_v1.TransferSpec(
             gcs_data_sink=storage_transfer_v1.GcsData(
                 bucket_name=dest_bucket_name,
-                # path=f'{location}/'
-                path=f'{location}'
+                path=f'{location}/'
+                # path=f'{location}'
             ),
             aws_s3_compatible_data_source=storage_transfer_v1.AwsS3CompatibleData(
                 bucket_name=source_bucket_name,
-                # path=f'{location}/',
-                path=f'{location}',
-                endpoint="bucket.vpce-057a79cdc14bd9f9a-m1g7h019.s3.ap-southeast-1.vpce.amazonaws.com",
-                # endpoint=f"{endpoint1 if switchEndpoint else endpoint2 }",
+                path=f'{location}/',
+                # path=f'{location}',
+                # endpoint="bucket.vpce-057a79cdc14bd9f9a-m1g7h019.s3.ap-southeast-1.vpce.amazonaws.com",
+                endpoint=f"{endpoint1 if switchEndpoint else endpoint2 }",
                 region='ap-southeast-1',
                 s3_metadata=storage_transfer_v1.S3CompatibleMetadata(
                     auth_method=storage_transfer_v1.S3CompatibleMetadata.AuthMethod.AUTH_METHOD_AWS_SIGNATURE_V4,
@@ -134,9 +136,9 @@ if __name__== '__main__':
                     list_api=storage_transfer_v1.S3CompatibleMetadata.ListApi.LIST_OBJECTS_V2
                 )
             ),
-            # object_conditions=storage_transfer_v1.ObjectConditions(
-            #     include_prefixes=['year=2023/', '_delta_log/']
-            # ),
+            object_conditions=storage_transfer_v1.ObjectConditions(
+                include_prefixes=['year=2023/', '_delta_log/']
+            ),
             transfer_options=storage_transfer_v1.TransferOptions(
                 overwrite_when=storage_transfer_v1.TransferOptions.OverwriteWhen.DIFFERENT,
                 metadata_options=storage_transfer_v1.MetadataOptions(
@@ -144,11 +146,11 @@ if __name__== '__main__':
                     time_created=storage_transfer_v1.MetadataOptions.TimeCreated.TIME_CREATED_PRESERVE_AS_CUSTOM_TIME
                 )
             ),
-            source_agent_pool_name=f'projects/{project_id}/agentPools/meesho-supply-prd-sts-transfer-pool'
-            # source_agent_pool_name=f'projects/{project_id}/agentPools/{pool_option1 if switchPool else pool_option2}'
+            # source_agent_pool_name=f'projects/{project_id}/agentPools/meesho-supply-prd-sts-transfer-pool'
+            source_agent_pool_name=f'projects/{project_id}/agentPools/{pool_option1 if switchPool else pool_option2}'
         )
-        # switchPool = not switchPool
-        # switchEndpoint = not switchEndpoint
+        switchPool = not switchPool
+        switchEndpoint = not switchEndpoint
         new_transfer_job.transfer_spec = transfer_spec
 
         try:
@@ -161,6 +163,7 @@ if __name__== '__main__':
             logging.error(f"Resource already exists: {e}")
         except Exception as e:
             logging.error(f"An unexpected error occurred: {e}")
+            logging.error(traceback.format_exc())
         # exit(0)
         
 
