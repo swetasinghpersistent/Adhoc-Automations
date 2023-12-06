@@ -24,13 +24,16 @@ pip3 install -r requirements.txt
 Step 2: Add all required variables in the .env file. For ex.
 
 ```
-PROJECT_ID=meesho-supply-prd-0622
+alPROJECT_ID=meesho-dataengg-prd-0622
 EXCEL_FILE_PATH=jobs_info.xlsx          # excel sheet must have two column job_name and location
-DEST_BUCKET_NAME=meesho-supply-v2       # gcp bucket
-SOURCE_BUCKET_NAME=gcs-supl-fnf-pdf-prd    #aws bucket
+DEST_BUCKET_NAME=gcs-deng-dping-data-platform-hive-prd       # gcp bucket
+SOURCE_BUCKET_NAME=data-platform-hive   #aws bucket
 POOL_OPTION1=meesho-dataengg-sts-transfer-pool-1
 POOL_OPTION2=meesho-dataengg-sts-transfer-pool-2
 ENDPOINT1=bucket.vpce-0dc2fb490b50f02e2-uwoenjfk.s3.ap-southeast-1.vpce.amazonaws.com
+ENDPOINT2=bucket.vpce-0fb63f3ffd470c949-ntbhdiq9.s3.ap-southeast-1.vpce.amazonaws.com
+PREFIX="year=2023/,_delta_log/"           # Optional if require to add prefix
+START_TIMEDELTA=10                     #Jobs will be schedule after X minutes of creation, this is to intertain the execution time delay0dc2fb490b50f02e2-uwoenjfk.s3.ap-southeast-1.vpce.amazonaws.com
 ENDPOINT2=bucket.vpce-0fb63f3ffd470c949-ntbhdiq9.s3.ap-southeast-1.vpce.amazonaws.com
 PREFIX="year=2023/,_delta_log/"           # Option if require to add prefix
 START_TIMEDELTA=10                     #Jobs will be schedule after X minutes of creation, this is to intertain the execution time delay
