@@ -93,7 +93,7 @@ if __name__== '__main__':
 
         new_transfer_job = storage_transfer_v1.TransferJob()
         new_transfer_job.name = "transferJobs/" + job_name
-        new_transfer_job.description= 'S3 Data Transfer for meesho-supply-v2 for Expressbees'
+        # new_transfer_job.description= 'S3 Data Transfer for meesho-supply-v2 for Expressbees'
         new_transfer_job.project_id = project_id
         new_transfer_job.status = 1
 
