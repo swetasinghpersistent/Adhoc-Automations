@@ -80,7 +80,7 @@ if __name__== '__main__':
     for index, row in jobs_df.iterrows():
         cnt += 1
         if cnt == 50:
-            time.sleep(20)
+            time.sleep(50)
             cnt=0
         job_name = row['job_name']
         location = row['location']
