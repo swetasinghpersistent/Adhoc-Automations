@@ -208,5 +208,3 @@ if __name__== '__main__':
             logging.error(traceback.format_exc())
         # exit(0)
     logging.info('Script completed.')
-scheduleStorageTransferJob_v3.py
-Displaying scheduleStorageTransferJob_v3.py.
