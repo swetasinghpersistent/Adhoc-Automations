@@ -1,3 +1,4 @@
+
 import pandas as pd
 import traceback
 from google.cloud import storage_transfer_v1
@@ -59,6 +60,35 @@ def checkPath(bucket_name, directory_path):
         logging.info(f"The directory **{directory_path}** does not exists in the bucket **{bucket_name}**.")
         return False
 
+
+def get_executed_jobs(transfer_client, project_id):
+    # Initialize request argument(s)
+    request = storage_transfer_v1.ListTransferJobsRequest(
+        filter='{"projectId":"'+project_id+'"}',
+    )
+    # Make the request
+    page_result = transfer_client.list_transfer_jobs(request=request)
+    # Handle the response
+    
+    
+    list = []
+    for response in page_result :
+        #print(response)
+        if str(response.name).replace("transferJobs/","").isdigit():
+            continue
+        data = {}
+        data['job_name'] = str(response.name).replace("transferJobs/","")
+        data['path'] = str(response.transfer_spec.gcs_data_sink.path).strip("/")
+        list.append(data)
+    jobs_list_df = pd.DataFrame.from_records(list)
+    return jobs_list_df
+
+
+def get_diff(jobs_df,job_list_df):
+    diff_df = jobs_df[~jobs_df.job_name.isin(job_list_df.job_name)]
+    diff_df.to_csv("diff_file.csv")
+    return diff_df
+
 if __name__== '__main__':
     project_id = os.environ.get("PROJECT_ID", "")
     excel_file_path= os.environ.get("EXCEL_FILE_PATH", "")
@@ -72,10 +102,24 @@ if __name__== '__main__':
     prefix= os.environ.get("PREFIX" ,"" ).split(",")
     
     jobs_df = pd.read_excel(excel_file_path, sheet_name='Sheet1', engine='openpyxl')
-    enableLogging()
+
+    # enableLogging()
     switchEndpoint=True
     switchPool = True
     transfer_client = storage_transfer_v1.StorageTransferServiceClient()
+
+    job_list_df = get_executed_jobs(transfer_client, project_id)
+    jobs_df = get_diff(jobs_df,job_list_df)
+    exit(0) #-----need to remove for daily run
+    # enableLogging()
+    switchEndpoint=True
+    switchPool = True
+    transfer_client = storage_transfer_v1.StorageTransferServiceClient()
+
+    # execute_df = 
+    get_executed_jobs(transfer_client, project_id)
+    # new_jobs_df = jobs_df.compare(execute_df)
+
     cnt=0
     for index, row in jobs_df.iterrows():
         cnt += 1
@@ -87,9 +131,6 @@ if __name__== '__main__':
         logging.info(f'job_name: {job_name}, location: {location}')
         # delete_jobs(job_name,project_id)
         # continue
-        # if not checkPath("gcs-deng-dping-data-platform-hive-prd",location):
-        #     logging.info(f"skipping this job..")
-        #     continue
 
         new_transfer_job = storage_transfer_v1.TransferJob()
         new_transfer_job.name = "transferJobs/" + str(job_name)
@@ -166,5 +207,6 @@ if __name__== '__main__':
             logging.error(f"An unexpected error occurred: {e}")
             logging.error(traceback.format_exc())
         # exit(0)
-
     logging.info('Script completed.')
+test.py
+Displaying test.py.
