@@ -110,7 +110,7 @@ if __name__== '__main__':
 
     job_list_df = get_executed_jobs(transfer_client, project_id)
     jobs_df = get_diff(jobs_df,job_list_df)
-    exit(0) #-----need to remove for daily run
+    #exit(0) #-----need to remove for daily run
     # enableLogging()
     switchEndpoint=True
     switchPool = True
