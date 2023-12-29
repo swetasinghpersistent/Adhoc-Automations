@@ -79,8 +79,8 @@ if __name__== '__main__':
     cnt=0
     for index, row in jobs_df.iterrows():
         cnt += 1
-        if cnt == 50:
-            time.sleep(20)
+        if cnt == 20:
+            time.sleep(40)
             cnt=0
         job_name = row['job_name']
         location = row['location']
