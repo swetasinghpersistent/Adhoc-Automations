@@ -102,7 +102,7 @@ if __name__== '__main__':
     prefix= os.environ.get("PREFIX" ,"" ).split(",")
     
     jobs_df = pd.read_excel(excel_file_path, sheet_name='Sheet1', engine='openpyxl')
-
+    print(prefix)
     # enableLogging()
     switchEndpoint=True
     switchPool = True
@@ -122,6 +122,7 @@ if __name__== '__main__':
 
     cnt=0
     for index, row in jobs_df.iterrows():
+        print(cnt)
         cnt += 1
         if cnt == 20:
             time.sleep(40)
