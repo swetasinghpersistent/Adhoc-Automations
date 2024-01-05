@@ -109,13 +109,15 @@ if __name__== '__main__':
     transfer_client = storage_transfer_v1.StorageTransferServiceClient()
 
     job_list_df = get_executed_jobs(transfer_client, project_id)
+    print(job_list_df.head(3))
     jobs_df = get_diff(jobs_df,job_list_df)
+    print(jobs_df.head(3))
     #exit(0) #-----need to remove for daily run
     # enableLogging()
     switchEndpoint=True
     switchPool = True
     transfer_client = storage_transfer_v1.StorageTransferServiceClient()
-
+    print(prefix)
     # execute_df = 
     get_executed_jobs(transfer_client, project_id)
     # new_jobs_df = jobs_df.compare(execute_df)
