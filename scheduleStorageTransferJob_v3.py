@@ -102,7 +102,7 @@ if __name__== '__main__':
     prefix= os.environ.get("PREFIX" ,"" ).split(",")
     
     jobs_df = pd.read_excel(excel_file_path, sheet_name='Sheet1', engine='openpyxl')
-    print(prefix)
+    #print(prefix)
     # enableLogging()
     switchEndpoint=True
     switchPool = True
@@ -117,7 +117,7 @@ if __name__== '__main__':
     switchEndpoint=True
     switchPool = True
     transfer_client = storage_transfer_v1.StorageTransferServiceClient()
-    print(prefix)
+    #print(prefix)
     # execute_df = 
     get_executed_jobs(transfer_client, project_id)
     # new_jobs_df = jobs_df.compare(execute_df)
@@ -134,7 +134,7 @@ if __name__== '__main__':
         logging.info(f'job_name: {job_name}, location: {location}')
         # delete_jobs(job_name,project_id)
         # continue
-
+        print(job_name)
         new_transfer_job = storage_transfer_v1.TransferJob()
         new_transfer_job.name = "transferJobs/" + str(job_name)
         # new_transfer_job.description= 'S3 Data Transfer for meesho-supply-v2 for Expressbees'
