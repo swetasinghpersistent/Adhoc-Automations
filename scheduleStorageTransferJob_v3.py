@@ -109,9 +109,9 @@ if __name__== '__main__':
     transfer_client = storage_transfer_v1.StorageTransferServiceClient()
 
     job_list_df = get_executed_jobs(transfer_client, project_id)
-    print(job_list_df.head(3))
+    #print(job_list_df.head(3))
     jobs_df = get_diff(jobs_df,job_list_df)
-    print(jobs_df.head(3))
+    #print(jobs_df.head(3))
     #exit(0) #-----need to remove for daily run
     # enableLogging()
     switchEndpoint=True
@@ -124,7 +124,7 @@ if __name__== '__main__':
 
     cnt=0
     for index, row in jobs_df.iterrows():
-        print(cnt)
+        #print(cnt)
         cnt += 1
         if cnt == 20:
             time.sleep(40)
